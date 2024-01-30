@@ -13,7 +13,7 @@ descriptors = {
 classifiers = ['DecisionTreeClassifier', 'MLPClassifier', 'SVC', 'RandomForestClassifier', 'KNeighborsClassifier']
 sizes = ['256', '400', '512']
 minimums = [5, 10, 20]
-colors = ['RGB', 'grayscale']
+colors = ['RGB', 'GRAYSCALE']
 
 
 def get_indexs_rgb():
@@ -65,16 +65,15 @@ def get_column(infos):
 def create_sheets(dfs, path):
     for minimum in minimums:
         for c in colors:
-            for p in pathlib.Path(path).rglob('mean+f1+sum.csv'):
-
+            for p in pathlib.Path(path).rglob('*/mean+f1+sum.csv'):
                 infos = parse_folder_name(p.parent.parent.parent.name)
                 if str(infos['minimum']) == str(minimum) and str(infos['features']) == str(
                         descriptors[infos['extractor']][0]) and c == str(infos['color']):
                     df = pd.read_csv(p, index_col=0, header=None, sep=';')
-                    if pd.isna(dfs[get_df_sheet(infos, minimum)].loc[get_index_mean(infos), get_column(infos)]):
-                        dfs[get_df_sheet(infos, minimum)].loc[get_index_mean(infos), get_column(infos)] = \
-                            df.loc['mean_f1'].values[0]
+                    # if pd.isna(dfs[get_df_sheet(infos, minimum)].loc[get_index_mean(infos), get_column(infos)]):
+                    dfs[get_df_sheet(infos, minimum)].loc[get_index_mean(infos), get_column(infos)] = \
+                        df.loc['mean_f1'].values[0]
 
-                    if pd.isna(dfs[get_df_sheet(infos, minimum)].loc[get_index_std(infos), get_column(infos)]):
-                        dfs[get_df_sheet(infos, minimum)].loc[get_index_std(infos), get_column(infos)] = \
-                            df.loc['std_f1'].values[0]
+                    # if pd.isna(dfs[get_df_sheet(infos, minimum)].loc[get_index_std(infos), get_column(infos)]):
+                    dfs[get_df_sheet(infos, minimum)].loc[get_index_std(infos), get_column(infos)] = \
+                        df.loc['std_f1'].values[0]
